@@ -13,6 +13,7 @@
 
 # PyPi
 *.egg
+*.eggs/
 *.egg-info
 build
 eggs
@@ -26,6 +27,7 @@ lib
 lib64
 pip-log.txt
 dist/
+*.whl
 
 # Coverage
 .coverage
@@ -43,5 +45,4 @@ docs/build
 output/
 
 # Pillar
-*version.txt
-*hash.txt
+casement/version.py
