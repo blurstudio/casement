@@ -40,6 +40,7 @@ output/*/index.html
 
 # Sphinx
 docs/build
+*.rst
 
 # Cookie Cutter
 output/

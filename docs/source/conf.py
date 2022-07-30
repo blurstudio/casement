@@ -15,7 +15,10 @@
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#
+
+# Command to build documentation
+# `sphinx-apidoc -o ./docs/source casement tests ./setup.py -e -f && sphinx-build -b html ./docs/source ./docs/build/preview`
+
 import os
 import sys
 import distutils.core
