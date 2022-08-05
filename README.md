@@ -2,6 +2,12 @@
 
 A Python library that provides useful functionality for managing Microsoft Windows systems.
 
+## Features
+
+* App Model Id management for shortcuts and inside python applications to allow for taskbar grouping.
+* Finding, creating and moving shortcuts.
+* Pinning shortcuts to the taskbar and start menu.
+* Flashing a window to get a users attention.
 
 ## Shortcut management
 
@@ -36,3 +42,9 @@ Pinning/unpinning a shortcut to the taskbar:
     C:\blur\dev\casement>casement shortcut pin "C:\Users\Public\Desktop\My Shortcut.lnk" -t
     C:\blur\dev\casement>casement shortcut unpin "C:\Users\Public\Desktop\My Shortcut.lnk" -t
 ```
+
+# Installing
+
+Casement can be installed by the standard pip command `pip install casement`.
+There is also an optional extras_require option `pip install casement[pil]` to
+allow creating shortcut icons by converting image files to .ico files.

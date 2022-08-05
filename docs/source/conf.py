@@ -17,7 +17,8 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 
 # Command to build documentation
-# `sphinx-apidoc -o ./docs/source casement tests ./setup.py -e -f && sphinx-build -b html ./docs/source ./docs/build/preview`
+# `sphinx-apidoc -o ./docs/source casement tests ./setup.py -e -f && sphinx-build
+# -b html ./docs/source ./docs/build/preview`
 
 import os
 import sys
