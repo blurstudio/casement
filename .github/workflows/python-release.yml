@@ -1,3 +1,5 @@
+name: PyPi Release
+
 on:
   release:
     types: [created]
