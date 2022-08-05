@@ -1,4 +1,4 @@
-""" A interface for manipulating Windows shortcut files including pinned.
+r"""A interface for manipulating Windows shortcut files including pinned.
 
 Pinning shortcuts to the start menu and task bar in windows is extremely complicated.
 You can find and edit shortcuts in the User Pinned directory for for all users, but
@@ -41,19 +41,20 @@ the network.
 
 **Command line interface**
 
-The features of this class can be used from the command line using ``casement shortcut
-[command] [arguments]``.
+The features of this class can be used from the command line using ``casement
+shortcut [command] [arguments]``.
 
 To find shortcuts in common places with a given name::
 
     C:\\blur\dev\\casement>casement shortcut list "VLC media player.lnk"
-    c:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\VideoLAN\\VLC media player.lnk
+    c:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\VideoLAN\\
+        VLC media player.lnk
     c:\\Users\\Public\\Desktop\\VLC media player.lnk
 
 Pinning/unpinning a shortcut to the taskbar ::
 
-    C:\\blur\\dev\\casement>casement shortcut pin "C:\\Users\\Public\\Desktop\\My Shortcut.lnk" -t
-    C:\\blur\\dev\\casement>casement shortcut unpin "C:\\Users\\Public\\Desktop\\My Shortcut.lnk" -t
+    C:\>casement shortcut pin "C:\\Users\\Public\\Desktop\\My Shortcut.lnk" -t
+    C:\>casement shortcut unpin "C:\\Users\\Public\\Desktop\\My Shortcut.lnk" -t
 """
 
 import os
@@ -69,11 +70,11 @@ from argparse import ArgumentParser
 
 class Shortcut(object):
     default_paths = (
-        r'{mount}\Users\*\AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar',
-        r'{mount}\Users\*\AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\User Pinned\StartMenu',
-        r'{mount}\Users\*\AppData\Roaming\Microsoft\Windows\Start Menu\Programs',
-        r'{mount}\ProgramData\Microsoft\Windows\Start Menu\Programs\*',
-        r'{mount}\Users\*\Desktop',
+        '{mount}\\Users\\*\\AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar',  # noqa: B950
+        '{mount}\\Users\\*\\AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\StartMenu',  # noqa: B950
+        '{mount}\\Users\\*\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs',
+        '{mount}\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\*',
+        '{mount}\\Users\\*\\Desktop',
     )
     """ Paths the find_shortcuts classmethod searches by default. """
 
@@ -87,8 +88,7 @@ class Shortcut(object):
         self._exists()
 
     def __enter__(self):
-        """ If a shortcut can't be pinned, copy it locally while inside this context
-        """
+        """If a shortcut can't be pinned, copy it locally while inside this context"""
         self._dirname_backup = None
         try:
             start_menu, taskbar = self.is_pinned()
@@ -105,8 +105,7 @@ class Shortcut(object):
         return self
 
     def __exit__(self, type, value, traceback):
-        """ Remove the tempfile and restore the dirname
-        """
+        """Remove the tempfile and restore the dirname"""
         if self._dirname_backup is not None:
             # If we copied the shortcut locally cleanup the temp files and reset
             shutil.rmtree(self.dirname)
@@ -114,31 +113,30 @@ class Shortcut(object):
             self._dirname_backup = None
 
     def _exists(self):
-        """ Raises a WindowsError if self.filename does not exist.
-        """
+        """Raises a WindowsError if self.filename does not exist."""
         if not os.path.isfile(self.filename):
             # We can't get the verb of a file that does not exist on disk.
             msg = 'No such file'
             raise WindowsError(errno.ENOENT, msg, self.filename)
 
-    def _run_verb(self, verbName):
-        """ Run the verb with this name.
+    def _run_verb(self, verb_name):
+        """Run the verb with this name.
 
         Args:
-            verbName (str): The exact name of the verb, including & symbols.
+            verb_name (str): The exact name of the verb, including & symbols.
                 For example `Pin to Start Men&u`.
 
         Returns:
             bool: If the verb was found and run.
         """
         for verb in self.file_verbs():
-            if verb.Name == verbName:
+            if verb.Name == verb_name:
                 verb.DoIt()
                 return True
         return False
 
     def copy(self, target):
-        """ Copy this shortcut to/over the target.
+        """Copy this shortcut to/over the target.
 
         If target is a pinned shortcut for the current user, this will unpin the
         existing pinned shortcut if it exists, then pin ``self.filename`` to the
@@ -182,13 +180,13 @@ class Shortcut(object):
 
     @property
     def filename(self):
-        """ The source shortcut filename this class uses as its source. """
+        """The source shortcut filename this class uses as its source."""
         return os.path.join(self.dirname, self.basename)
 
     def file_verbs(self):
-        """ Iterator of the verbs windows exposes for filename. """
-        objShell = win32com.client.Dispatch('Shell.Application')
-        folder = objShell.Namespace(self.dirname)
+        """Iterator of the verbs windows exposes for filename."""
+        obj_shell = win32com.client.Dispatch('Shell.Application')
+        folder = obj_shell.Namespace(self.dirname)
         item = folder.ParseName(self.basename)
         # It's possible that the file was removed.
         self._exists()
@@ -201,9 +199,9 @@ class Shortcut(object):
         link_name,
         mount='C:',
         paths=default_paths,
-        ignored_paths=default_ignored_paths
+        ignored_paths=default_ignored_paths,
     ):
-        """ Find shortcuts with a given name in known locations.
+        """Find shortcuts with a given name in known locations.
 
         Each path in paths and ignored_paths will have ``{mount=mount}``
         str.formatted into it before checking for files. Mount can be used to search
@@ -235,7 +233,7 @@ class Shortcut(object):
         return links, ignored
 
     def is_pinned(self):
-        """ Returns if the shortcut is currently pinned to the start_menu or taskbar
+        """Returns if the shortcut is currently pinned to the start_menu or taskbar
         for the current user.
 
         Returns:
@@ -243,8 +241,8 @@ class Shortcut(object):
             taskbar (bool): If the shortcut is pinned to the taskbar.
 
         Raises:
-            WindowsError: If no pinning verbs were found for ``self.filename``, this error
-                is raised as ``errno.EPERM``.
+            WindowsError: If no pinning verbs were found for ``self.filename``,
+                this error is raised as ``errno.EPERM``.
         """
         start_menu = None
         taskbar = None
@@ -268,7 +266,7 @@ class Shortcut(object):
         return start_menu, taskbar
 
     def move(self, target):
-        """ Move this shortcut to/over the target.
+        """Move this shortcut to/over the target.
 
         If target is a pinned shortcut for the current user, this will unpin the
         existing pinned shortcut if it exists, then pin ``self.filename`` to the
@@ -313,7 +311,7 @@ class Shortcut(object):
 
     @classmethod
     def path_in_pin_dir(cls, path, current_user=True):
-        """ Check if the provided path is in a pinned directory.
+        """Check if the provided path is in a pinned directory.
 
         Args:
             path (str): The file to check.
@@ -327,6 +325,7 @@ class Shortcut(object):
                 only be modified for the current user. This can be suppressed by
                 passing ``False`` to the current_user argument.
         """
+
         def normalize(path):
             return os.path.normcase(os.path.normpath(path))
 
@@ -337,10 +336,12 @@ class Shortcut(object):
             'User Pinned',
         )
         app_data = normalize(os.path.expandvars('%APPDATA%'))
-        pin_dir = normalize(os.path.join(
-            app_data,
-            pin_structure,
-        ))
+        pin_dir = normalize(
+            os.path.join(
+                app_data,
+                pin_structure,
+            )
+        )
         # path could be a filename or a dirname
         norm_dir = normalize(path)
         if norm_dir.endswith('.lnk'):
@@ -355,7 +356,7 @@ class Shortcut(object):
         return is_start_menu, is_taskbar
 
     def pin_to_start_menu(self):
-        """ Pin to the start menu. If already pinned, nothing is done.
+        """Pin to the start menu. If already pinned, nothing is done.
 
         Returns:
             bool: If the pin verb was found and run.
@@ -364,7 +365,7 @@ class Shortcut(object):
         return self._run_verb('Pin to Start Men&u')
 
     def pin_to_taskbar(self):
-        """ Pin to the taskbar. If already pinned, nothing is done.
+        """Pin to the taskbar. If already pinned, nothing is done.
 
         Returns:
             bool: If the pin verb was found and run.
@@ -373,7 +374,7 @@ class Shortcut(object):
         return self._run_verb('Pin to Tas&kbar')
 
     def unpin_from_start_menu(self):
-        """ Un-Pin from the start menu.
+        """Un-Pin from the start menu.
 
         Returns:
             bool: If the pin verb was found and run.
@@ -382,7 +383,7 @@ class Shortcut(object):
         return self._run_verb('Unpin from Start Men&u')
 
     def unpin_from_taskbar(self):
-        """ Un-Pin from the taskbar.
+        """Un-Pin from the taskbar.
 
         Returns:
             bool: If the pin verb was found and run.
@@ -397,13 +398,14 @@ class _CLI(object):
         self._base_parser = ArgumentParser(
             description='Pretends to be git',
             usage="casement shortcut <command> [<args>]\n\n"
-                  "Valid commands are:\n"
-                  "   copy:  Copy a shortcut to a new location.\n"
-                  "   list:  Find all shortcuts in expected locations with a given name.\n"
-                  "   move:  Rename a shortcut to a given file name and path.\n"
-                  "   pin:   Pin the shortcut to the current user's start menu and taskbar\n"
-                  "   unpin: Un-Pin the shortcut to the current user's start menu and taskbar"
-            )
+            "Valid commands are:\n"
+            "   copy:  Copy a shortcut to a new location.\n"
+            "   list:  Find all shortcuts in expected locations with a given name.\n"
+            "   move:  Rename a shortcut to a given file name and path.\n"
+            "   pin:   Pin the shortcut to the current user's start menu and taskbar\n"
+            "   unpin: Un-Pin the shortcut to the current user's start menu and "
+            "taskbar",
+        )
         self._base_parser.add_argument('command', help='Command to run')
 
         args = self._base_parser.parse_args(args)
@@ -416,24 +418,20 @@ class _CLI(object):
         getattr(self, args.command)()
 
     def copy(self):
-        """ Parse copy command line arguments """
+        """Parse copy command line arguments"""
         self.parser = ArgumentParser(
             description='Copy the the shortcut to the given target. Removes the target '
             'if it already exists and is a file. If target is a pinned shortcut '
             'location, then target is un-pinned if needed and re-pinned.',
             usage='casement shortcut copy [-h] [-v] source target',
         )
+        self.parser.add_argument('source', help='Full path of the shortcut to copy.')
         self.parser.add_argument(
-            'source',
-            help='Full path of the shortcut to copy.'
-        )
-        self.parser.add_argument(
-            'target',
-            help='Directory or filename to copy source to.'
+            'target', help='Directory or filename to copy source to.'
         )
 
     def list(self):
-        """ Parse list command line arguments """
+        """Parse list command line arguments"""
         self.parser = ArgumentParser(
             description='Find icons for the given icon name.',
             usage='casement shortcut list [-h] [-v] name',
@@ -443,18 +441,18 @@ class _CLI(object):
             'name',
             help="A list of shortcuts with that name "
             "in known paths will be printed in this case. The --mount argument can "
-            "be used to find shortcuts on other file systems."
+            "be used to find shortcuts on other file systems.",
         )
         self.parser.add_argument(
             '-m',
             '--mount',
             default='c:',
             help='Search all paths relative to this drive letter. Lets you specify a '
-            'remote share. Defaults to C:'
+            'remote share. Defaults to C:',
         )
 
     def move(self):
-        """ Parse move command line arguments """
+        """Parse move command line arguments"""
         self.parser = ArgumentParser(
             description='Rename the shortcut to the given target. Removes the target '
             'if it already exists and is a file. If target is a pinned shortcut '
@@ -462,43 +460,39 @@ class _CLI(object):
             'command for details.',
             usage='casement shortcut move [-h] [-v] source target',
         )
+        self.parser.add_argument('source', help='Full path of the shortcut to move.')
         self.parser.add_argument(
-            'source',
-            help='Full path of the shortcut to move.'
-        )
-        self.parser.add_argument(
-            'target',
-            help='Directory or filename to move source to.'
+            'target', help='Directory or filename to move source to.'
         )
 
     def pin(self):
-        """ Parse pin command line arguments """
+        """Parse pin command line arguments"""
         self.parser = ArgumentParser(
-            description="Pin or re-pin link to the current user's start menu or taskbar. "
-            "Re-pinning does not preserver order. The current pinned status is printed if "
-            "-s and -t are not passed.",
+            description="Pin or re-pin link to the current user's start menu or "
+            "taskbar. Re-pinning does not preserver order. The current pinned "
+            "status is printed if -s and -t are not passed.",
             usage='casement shortcut pin [-s] [-t] [-h] [-v] source',
         )
         self.parser.add_argument(
             'source',
             help="The full path to the shortcut. "
-            "For example C:\Users\Public\Desktop\Treegrunt.lnk."
+            "For example C:\\Users\\Public\\Desktop\\Treegrunt.lnk.",
         )
         self.parser.add_argument(
             '-s',
             '--start-menu',
             action='store_true',
-            help="Update the current user's start menu."
+            help="Update the current user's start menu.",
         )
         self.parser.add_argument(
             '-t',
             '--taskbar',
             action='store_true',
-            help="Update the current user's taskbar."
+            help="Update the current user's taskbar.",
         )
 
     def unpin(self):
-        """ Parse unpin command line arguments """
+        """Parse unpin command line arguments"""
         self.parser = ArgumentParser(
             description="Un-pin link from the current user's start menu.",
             usage='casement shortcut unpin [-h] [-v] source target',
@@ -506,19 +500,19 @@ class _CLI(object):
         self.parser.add_argument(
             'source',
             help="The full path to the shortcut. "
-            "For example C:\Users\Public\Desktop\Treegrunt.lnk."
+            "For example C:\\Users\\Public\\Desktop\\Treegrunt.lnk.",
         )
         self.parser.add_argument(
             '-s',
             '--start-menu',
             action='store_true',
-            help="Update the current user's start menu."
+            help="Update the current user's start menu.",
         )
         self.parser.add_argument(
             '-t',
             '--taskbar',
             action='store_true',
-            help="Update the current user's taskbar."
+            help="Update the current user's taskbar.",
         )
 
     def run(self, args):

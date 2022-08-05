@@ -6,9 +6,9 @@ from argparse import ArgumentParser
 
 class CasementParser(object):
     '''
-    To implement a cli for casement, create a submodule with the name of your cli command.
-    For example to add a ``casement test echo`` command, you would create casement\test.py
-    with the following code::
+    To implement a cli for casement, create a submodule with the name of your
+    cli command. For example to add a ``casement test echo`` command, you would
+    create casement\test.py with the following code::
 
         import argparse
         from argparse import ArgumentParser
@@ -25,25 +25,25 @@ class CasementParser(object):
                 getattr(self, args.command)()
 
             def echo(self):
-                """ Creates a ArgumentParser to handle the echo command as self.parser """
+                """Creates a ArgumentParser to handle the echo command as self.parser"""
                 self.parser = ArgumentParser(
                     usage='casement shortcut test [-h] [-v] text',
                 )
                 self.parser.add_argument('text', nargs=argparse.REMAINDER)
 
             def run(self, args):
-                """ Do something with the arguments parsed from self.parser """
+                """Do something with the arguments parsed from self.parser"""
                 if args.command == 'echo':
                     print('ECHO: {}'.format(' '.join(args.text)))
     '''
+
     def __init__(self):
         self.target_cli = None
         self._base_parser = ArgumentParser(
             description='Windows management tool',
             usage="casement <command> [<args>]\n\n"
-                  "Valid commands are:\n"
-                  "    shortcut or sc: Manage windows shortcuts."
-
+            "Valid commands are:\n"
+            "    shortcut or sc: Manage windows shortcuts.",
         )
         self._base_parser.add_argument('command', help='Command to run')
         args = self._base_parser.parse_args(sys.argv[1:2])
@@ -71,14 +71,11 @@ class CasementParser(object):
                 break
         else:
             self.target_cli.parser.add_argument(
-                '-v',
-                '--verbose',
-                action='store_true',
-                help='Give more output.'
+                '-v', '--verbose', action='store_true', help='Give more output.'
             )
 
     def parse_args(self):
-        """ Parse sub-command arguments adding global options. """
+        """Parse sub-command arguments adding global options."""
         args = self.target_cli.parser.parse_args(self.args_list)
         # Add command to the args from the target_cli
         try:
@@ -92,8 +89,7 @@ def main():
     casement = CasementParser()
     args = casement.parse_args()
     logging.basicConfig(
-        format='%(message)s',
-        level=logging.DEBUG if args.verbose else logging.INFO
+        format='%(message)s', level=logging.DEBUG if args.verbose else logging.INFO
     )
 
     casement.target_cli.run(args)
