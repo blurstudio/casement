@@ -1,4 +1,5 @@
 import ctypes
+
 from .enums import FlashTimes
 
 

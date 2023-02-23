@@ -1,7 +1,8 @@
 import ctypes
 import os
-import pythoncom
 from ctypes import wintypes
+
+import pythoncom
 from win32com.propsys import propsys
 from win32com.shell import shellcon
 

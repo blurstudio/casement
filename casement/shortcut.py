@@ -62,13 +62,14 @@ import glob
 import logging
 import os
 import shutil
-import six
 import subprocess
 import sys
 import tempfile
+from argparse import ArgumentParser
+
+import six
 import win32com.client
 import winshell
-from argparse import ArgumentParser
 
 from .app_id import AppId
 
