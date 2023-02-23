@@ -1,6 +1,6 @@
-import sys
-import logging
 import importlib
+import logging
+import sys
 from argparse import ArgumentParser
 
 

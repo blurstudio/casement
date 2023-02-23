@@ -20,9 +20,10 @@
 # `sphinx-apidoc -o ./docs/source casement tests ./setup.py -e -f && sphinx-build
 # -b html ./docs/source ./docs/build/preview`
 
+import distutils.core
 import os
 import sys
-import distutils.core
+
 from setuptools_scm import get_version
 
 sys.path.insert(0, os.path.abspath('../..'))
