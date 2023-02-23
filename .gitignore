@@ -10,6 +10,8 @@
 # PyCharm
 .idea/
 .idea
+*.sublime-project
+*.sublime-workspace
 
 # PyPi
 *.egg
