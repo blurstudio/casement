@@ -33,8 +33,9 @@ dist/
 
 # Coverage
 .coverage
+.coverage.*
 .tox
-nosetests.xml
+coverage.xml
 
 # Complexity
 output/*.html
