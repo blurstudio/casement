@@ -49,6 +49,9 @@ jobs:
         python: ['3.7', '3.8', '3.9', '3.10']
 
     runs-on: 'windows-latest'
+    # Enable registry write testing
+    env:
+      CASEMENT_TEST_WRITE_ENV: 1
 
     steps:
       - name: Checkout code
