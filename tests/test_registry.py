@@ -13,6 +13,7 @@ Here are the registry keys that are modified when write testing is enabled.
 
 Note: See test_env_var.py to see how testing Environment variables are handled.
 """
+
 # TODO: Look into using a custom testing registry hive to handle all testing
 # without the need for the host to actually have these registry keys. We should
 # only enable testing of registry modifications once this is resolved.
