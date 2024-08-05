@@ -3,6 +3,7 @@ key: Nodes in tree
 Each node in the tree is called a key.
 Each key can contain both subkeys and data entries called values.
 """
+
 import six
 from six.moves import winreg
 
