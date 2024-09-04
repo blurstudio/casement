@@ -54,6 +54,10 @@ def env_var(var_name):
     return decorator
 
 
+@pytest.mark.skipif(
+    os.getenv("GITHUB_ACTIONS") == "true",
+    reason="Github Actions doesn't support short names anymore.",
+)
 def test_expand_path():
     # Generate a short name path. This method needs a file that actually
     # exists on disk, and test_env_var.py is long enough to get ~'ed
