@@ -49,4 +49,4 @@ docs/build
 output/
 
 # Pillar
-casement/version.py
+src/casement/version.py

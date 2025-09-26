@@ -7,7 +7,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
-write_to = "casement/version.py"
+write_to = "src/casement/version.py"
 
 [tool.black]
 skip-string-normalization = true
