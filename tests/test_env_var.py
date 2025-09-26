@@ -23,7 +23,7 @@ import win32api
 from casement.env_var import EnvVar
 from casement.registry import RegKey
 
-from . import ENV_VAR_REASON, SKIP_ENV_VAR_WRITES
+from . import reg_write_skipif
 
 TEST_VAR_NAME = 'CASEMENT_TEST_DELETE_ME_ENV_VAR'
 
@@ -84,7 +84,7 @@ def test_expand_path():
     assert out == __file__
 
 
-@pytest.mark.skipif(SKIP_ENV_VAR_WRITES, reason=ENV_VAR_REASON)
+@reg_write_skipif()
 @env_var(TEST_VAR_NAME)
 def test_envvar_modify():
     uenv = EnvVar(system=False)
@@ -139,7 +139,7 @@ class EnvVarPatch(EnvVar):
         cls.count += 1
 
 
-@pytest.mark.skipif(SKIP_ENV_VAR_WRITES, reason=ENV_VAR_REASON)
+@reg_write_skipif()
 @env_var(TEST_VAR_NAME)
 def test_broadcast():
     """This test tests that delayed_broadcast only calls broadcast in the outer
@@ -166,7 +166,7 @@ def test_broadcast():
     assert EnvVarPatch.count == 1
 
 
-@pytest.mark.skipif(SKIP_ENV_VAR_WRITES, reason=ENV_VAR_REASON)
+@reg_write_skipif()
 @env_var(TEST_VAR_NAME)
 def test_delayed_broadcast():
     """This test tests that delayed_broadcast only calls broadcast in the outer

@@ -27,7 +27,7 @@ from six.moves import winreg
 
 from casement.registry import REG_LOCATIONS, RegKey
 
-from . import ENABLE_ENV_VAR, ENV_VAR_REASON, SKIP_ENV_VAR_WRITES
+from . import ENABLE_ENV_VAR, reg_write_skipif
 
 
 @contextmanager
@@ -157,7 +157,7 @@ def test_sam():
     assert RegKey._sam(16) == 0
 
 
-@pytest.mark.skipif(SKIP_ENV_VAR_WRITES, reason=ENV_VAR_REASON)
+@reg_write_skipif()
 def test_write():
     key, root = REG_LOCATIONS['user']['classes']
     root = '{}\\CASEMENT_DELETE_ME'.format(root)
