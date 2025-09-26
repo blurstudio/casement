@@ -42,11 +42,41 @@ REG_LOCATIONS = {
     "user": {
         "classes": (winreg.HKEY_CURRENT_USER, 'Software\\Classes'),
         "env_var": (winreg.HKEY_CURRENT_USER, 'Environment'),
+        "regedit": (
+            winreg.HKEY_CURRENT_USER,
+            'Software\\Microsoft\\Windows\\CurrentVersion\\Applets\\Regedit',
+        ),
     },
 }
 
 
 class RegKey(object):
+    """Object for accessing a specific registry key.
+
+    Example:
+
+        import winreg
+        from casement.registry import RegKey, REG_LOCATIONS
+
+        # Examples of different ways to get access to the same registry key.
+        classes_system = RegKey(*REG_LOCATIONS['system']['classes'])
+        classes_system = RegKey('HKEY_LOCAL_MACHINE\\Software\\Classes')
+        classes_system = RegKey('HKEY_LOCAL_MACHINE', 'Software\\Classes')
+        classes_system = RegKey(winreg.HKEY_LOCAL_MACHINE, 'Software\\Classes')
+
+    Args:
+        key: The path to the registry key as a string, or a winreg HKEY_* constant.
+            If a string is passed it needs to start with one of keys stored in
+            `key_map`(Example: HKEY_CLASSES_ROOT, HKCR). Alternatively you can
+            pass a winreg HKEY_* constant (Example: `winreg.HKEY_CURRENT_USER`).
+        sub_key (str, optional): A string to access sub-keys of key. If None and
+            key is a string it will split key into key and sub-key.
+        computer_name (str, optional): Name of another computer to connect to it's
+            registry instead of the current one.
+        architecture (int, optional): Access this key in the the 32 or 64 bit registry.
+            Valid values are 32 or 64.
+    """
+
     def __init__(self, key, sub_key=None, computer_name=None, architecture=64):
         # If sub_key is not passed, it must be part of key
         if sub_key is None:
@@ -76,7 +106,7 @@ class RegKey(object):
         Returns:
             A winreg handle object
         """
-        connection = winreg.ConnectRegistry(None, self.key)
+        connection = winreg.ConnectRegistry(self.computer_name, self.key)
         sam = self._sam(self.architecture)
         access = winreg.KEY_READ
         if write:
@@ -176,6 +206,30 @@ class RegKey(object):
         """Returns True if the key exists in the registry."""
         key = self._key()
         return key is not None
+
+    def regedit(self, multiple=True):
+        """Opens regedit to this registry key."""
+        if not self.exists():
+            raise RuntimeError("Can't open regedit to a key that doesn't exist.")
+
+        regedit_key = REG_LOCATIONS['user']['regedit']
+        reg = RegKey(*regedit_key)
+        if not reg.exists():
+            raise RuntimeError("Unable to find regedit preference {}".format(reg))
+
+        # Update the registry prefs storing the last key it had open.
+        last_key = reg.entry('LastKey')
+        computer = self.computer_name if self.computer_name else "Computer"
+        new = '\\'.join((computer, key_map.get(self.key, self.key), self.sub_key))
+        last_key.set(new, winreg.REG_SZ)
+
+        # Launch regedit
+        import subprocess
+
+        cmd = ['regedit']
+        if multiple:
+            cmd.append('/m')
+        subprocess.Popen(cmd)
 
 
 class RegEntry(object):
