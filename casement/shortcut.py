@@ -319,6 +319,8 @@ class Shortcut(object):
         # Attempt to clear the windows icon cache so icon changes are displayed now
         cls.clear_icon_cache()
 
+        return shortcut
+
     @property
     def filename(self):
         """The source shortcut filename this class uses as its source."""
