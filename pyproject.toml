@@ -1,13 +1,83 @@
 [build-system]
 requires = [
     "setuptools >= 44.1.1",
-    "setuptools_scm[toml] >= 4, <6",
+    "setuptools_scm[toml] >= 4",
     "wheel >= 0.36",
 ]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "casement"
+description = "Useful functionality for managing Microsoft Windows."
+authors = [{name = "Blur Studio", email = "opensource@blur.com"}]
+license = {text = "LGPL-3.0"}
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: Microsoft",
+    "Operating System :: Microsoft :: Windows :: Windows 7",
+    "Operating System :: Microsoft :: Windows :: Windows 10",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+requires-python = ">=3.7"
+dynamic = ["dependencies", "optional-dependencies", "version"]
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
+
+[project.scripts]
+casement = "casement.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/blurstudio/casement"
+Source = "https://github.com/blurstudio/casement"
+Issues = "https://github.com/blurstudio/casement/issues"
+
+[tool.setuptools]
+platforms = ["any"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.dynamic.optional-dependencies]
+dev = {file = ["requirements-dev.txt"]}
+pil = {file = ["requirements-pil.txt"]}
+
+[tool.setuptools.packages.find]
+exclude = ["tests"]
+where = ["src"]
+
 [tool.setuptools_scm]
 write_to = "src/casement/version.py"
+version_scheme = "release-branch-semver"
 
 [tool.black]
 skip-string-normalization = true
+
+[tool.flake8]
+select = ["B", "C", "E", "F", "N", "W", "B9"]
+extend-ignore = [
+    "E203",
+    "E501",
+    "E722",
+    "W503",
+    "B904",
+]
+max-line-length = 80
+exclude = [
+    "*.egg-info",
+    "*.pyc",
+    ".cache",
+    ".eggs",
+    ".git",
+    ".tox",
+    "__pycache__",
+    "build",
+    "dist",
+]

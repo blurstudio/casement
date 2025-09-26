@@ -1,0 +1,9 @@
+black
+covdefaults
+coverage
+flake8
+flake8-bugbear
+Flake8-pyproject
+pep8-naming
+pytest
+tox
