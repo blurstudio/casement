@@ -1,3 +1,2 @@
 pywin32
-six
 winshell>=0.6

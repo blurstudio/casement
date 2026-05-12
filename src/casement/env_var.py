@@ -1,13 +1,13 @@
 import logging
 import os
+import winreg
+from collections.abc import MutableMapping
 from contextlib import contextmanager
 
 import win32api
 import win32con
 import win32file
 import win32gui
-from six.moves import winreg
-from six.moves.collections_abc import MutableMapping
 
 from .registry import REG_LOCATIONS, RegKey
 

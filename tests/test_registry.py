@@ -14,6 +14,8 @@ Here are the registry keys that are modified when write testing is enabled.
 Note: See test_env_var.py to see how testing Environment variables are handled.
 """
 
+import winreg
+
 # TODO: Look into using a custom testing registry hive to handle all testing
 # without the need for the host to actually have these registry keys. We should
 # only enable testing of registry modifications once this is resolved.
@@ -21,8 +23,6 @@ Note: See test_env_var.py to see how testing Environment variables are handled.
 from contextlib import contextmanager
 
 import pytest
-import six
-from six.moves import winreg
 
 from casement.registry import REG_LOCATIONS, RegKey
 
@@ -144,13 +144,13 @@ def test_entry():
     # String data type
     entry = reg.entry('PreviewTitle')
     assert entry.type() == winreg.REG_SZ
-    assert isinstance(entry.value(), six.string_types)
+    assert isinstance(entry.value(), str)
     assert entry.value() == 'prop:System.ItemNameDisplay;System.ItemTypeText'
 
     # Expanding string data type
     entry = reg.entry('FriendlyTypeName')
     assert entry.type() == winreg.REG_EXPAND_SZ
-    assert isinstance(entry.value(), six.string_types)
+    assert isinstance(entry.value(), str)
 
 
 def test_sam():

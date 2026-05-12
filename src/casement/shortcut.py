@@ -67,7 +67,6 @@ import sys
 import tempfile
 from argparse import ArgumentParser
 
-import six
 import win32com.client
 import winshell
 
@@ -303,7 +302,7 @@ class Shortcut(object):
         description = description[:259]
 
         # If args is a list, convert it to a string using subprocess
-        if not isinstance(args, six.string_types):
+        if not isinstance(args, str):
             args = subprocess.list2cmdline(args)
 
         kwargs = {
