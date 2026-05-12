@@ -4,8 +4,7 @@ Each node in the tree is called a key.
 Each key can contain both subkeys and data entries called values.
 """
 
-import six
-from six.moves import winreg
+import winreg
 
 
 def _generate_key_map():
@@ -84,7 +83,7 @@ class RegKey(object):
             key, sub_key = key.split('\\', 1)
 
         # Convert key strings into winreg keys
-        if isinstance(key, six.string_types):
+        if isinstance(key, str):
             key = key.upper()
             key = key_map[key]
 
@@ -256,7 +255,7 @@ class RegEntry(object):
     def set(self, value, value_type=None):
         key = self.key._key(write=True, create=True)
 
-        if isinstance(value_type, six.string_types):
+        if isinstance(value_type, str):
             value_type = getattr(winreg, value_type)
 
         winreg.SetValueEx(key, self.name, 0, value_type, value)
