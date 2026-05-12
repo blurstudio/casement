@@ -79,7 +79,9 @@ class EnvVar(MutableMapping):
     def __setitem__(self, key, value, value_type=winreg.REG_EXPAND_SZ):
         entry = self.__reg__.entry(key)
         with self.delayed_broadcast():
-            _logger_modify.debug('Setting env var: "{}" to "{}"'.format(key, value))
+            _logger_modify.debug(
+                'Setting env var: "{}" to "{}"'.format(key, value)
+            )
             entry.set(value, value_type=value_type)
             type(self)._broadcast_required = True
 

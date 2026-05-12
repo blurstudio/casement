@@ -102,7 +102,9 @@ class Shortcut(object):
             # the shortcut can not be pinned, copy it to a tempdir
             self._dirname_backup = self.dirname
             dirname = tempfile.mkdtemp()
-            shutil.copy2(os.path.join(self._dirname_backup, self.basename), dirname)
+            shutil.copy2(
+                os.path.join(self._dirname_backup, self.basename), dirname
+            )
             # Update the class so it uses the tempdir until we exit
             self.dirname = dirname
             # This will raise a WindowsError if we still can't pin the shortcut.
@@ -167,7 +169,9 @@ class Shortcut(object):
                 only be modified for the current user.
         """
         if not os.path.exists(self.filename):
-            raise IOError('Source link does not exist: "{}"'.format(self.filename))
+            raise IOError(
+                'Source link does not exist: "{}"'.format(self.filename)
+            )
 
         is_start_menu, is_taskbar = self.path_in_pin_dir(target)
         # We are copying to the user's pinned folder, don't copy the link, pin it.
@@ -190,7 +194,7 @@ class Shortcut(object):
             shutil.copy2(self.filename, target)
 
     @classmethod
-    def create(
+    def create(  # noqa: C901
         cls,
         title,
         args,
@@ -302,11 +306,11 @@ class Shortcut(object):
         if not isinstance(args, six.string_types):
             args = subprocess.list2cmdline(args)
 
-        kwargs = dict(
-            Arguments=args,
-            StartIn=startin,
-            Description=description,
-        )
+        kwargs = {
+            'Arguments': args,
+            'StartIn': startin,
+            'Description': description,
+        }
 
         if icon:
             kwargs["Icon"] = (icon, 0)
@@ -429,7 +433,9 @@ class Shortcut(object):
                 only be modified for the current user.
         """
         if not os.path.exists(self.filename):
-            raise IOError('Source link does not exist: "{}"'.format(self.filename))
+            raise IOError(
+                'Source link does not exist: "{}"'.format(self.filename)
+            )
         self.path_in_pin_dir(self.filename)
 
         is_start_menu, is_taskbar = self.path_in_pin_dir(target)
@@ -583,7 +589,9 @@ class _CLI(object):
             'location, then target is un-pinned if needed and re-pinned.',
             usage='casement shortcut copy [-h] [-v] source target',
         )
-        self.parser.add_argument('source', help='Full path of the shortcut to copy.')
+        self.parser.add_argument(
+            'source', help='Full path of the shortcut to copy.'
+        )
         self.parser.add_argument(
             'target', help='Directory or filename to copy source to.'
         )
@@ -596,7 +604,8 @@ class _CLI(object):
         )
         self.parser.add_argument('title', help='The title for the shortcut.')
         self.parser.add_argument(
-            'target', help='The target for the shortcut. Defaults to sys.executable.'
+            'target',
+            help='The target for the shortcut. Defaults to sys.executable.',
         )
         self.parser.add_argument(
             'source',
@@ -606,7 +615,9 @@ class _CLI(object):
             'Defaults to desktop.',
         )
         self.parser.add_argument(
-            '--args', default="", help='Argument string to pass to target command.'
+            '--args',
+            default="",
+            help='Argument string to pass to target command.',
         )
         self.parser.add_argument(
             '-p',
@@ -676,7 +687,9 @@ class _CLI(object):
             'command for details.',
             usage='casement shortcut move [-h] [-v] source target',
         )
-        self.parser.add_argument('source', help='Full path of the shortcut to move.')
+        self.parser.add_argument(
+            'source', help='Full path of the shortcut to move.'
+        )
         self.parser.add_argument(
             'target', help='Directory or filename to move source to.'
         )
@@ -731,9 +744,11 @@ class _CLI(object):
             help="Update the current user's taskbar.",
         )
 
-    def run(self, args):
+    def run(self, args):  # noqa: C901
         if args.command == 'list':
-            links, ignored = Shortcut.find_shortcuts(args.name, mount=args.mount)
+            links, ignored = Shortcut.find_shortcuts(
+                args.name, mount=args.mount
+            )
             if args.verbose and ignored:
                 logging.debug('---- Ignored shortcuts ----')
                 for link in ignored:

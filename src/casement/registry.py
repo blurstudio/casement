@@ -3,6 +3,7 @@ key: Nodes in tree
 Each node in the tree is called a key.
 Each key can contain both subkeys and data entries called values.
 """
+
 import six
 from six.moves import winreg
 
@@ -210,17 +211,23 @@ class RegKey(object):
     def regedit(self, multiple=True):
         """Opens regedit to this registry key."""
         if not self.exists():
-            raise RuntimeError("Can't open regedit to a key that doesn't exist.")
+            raise RuntimeError(
+                "Can't open regedit to a key that doesn't exist."
+            )
 
         regedit_key = REG_LOCATIONS['user']['regedit']
         reg = RegKey(*regedit_key)
         if not reg.exists():
-            raise RuntimeError("Unable to find regedit preference {}".format(reg))
+            raise RuntimeError(
+                "Unable to find regedit preference {}".format(reg)
+            )
 
         # Update the registry prefs storing the last key it had open.
         last_key = reg.entry('LastKey')
         computer = self.computer_name if self.computer_name else "Computer"
-        new = '\\'.join((computer, key_map.get(self.key, self.key), self.sub_key))
+        new = '\\'.join(
+            (computer, key_map.get(self.key, self.key), self.sub_key)
+        )
         last_key.set(new, winreg.REG_SZ)
 
         # Launch regedit

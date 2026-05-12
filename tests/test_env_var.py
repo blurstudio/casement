@@ -13,6 +13,7 @@ Here are the Environment variables that are modified when write testing is enabl
 
 Note: See test_registry.py to see how testing registry keys/entries are handled.
 """
+
 from __future__ import absolute_import
 
 import os

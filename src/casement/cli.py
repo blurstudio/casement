@@ -89,7 +89,8 @@ def main():
     casement = CasementParser()
     args = casement.parse_args()
     logging.basicConfig(
-        format='%(message)s', level=logging.DEBUG if args.verbose else logging.INFO
+        format='%(message)s',
+        level=logging.DEBUG if args.verbose else logging.INFO,
     )
 
     casement.target_cli.run(args)
