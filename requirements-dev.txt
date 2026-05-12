@@ -2,4 +2,6 @@ covdefaults
 coverage
 pytest
 ruff
+setuptools-scm
+sphinx-rtd-theme
 tox

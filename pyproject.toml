@@ -107,6 +107,9 @@ skip-magic-trailing-comma = false
 # Like Black, automatically detect the appropriate line ending.
 line-ending = "auto"
 
+[tool.deptry.package_module_name_map]
+pillow = "PIL"
+
 [tool.deptry.per_rule_ignores]
 DEP002 = [
     # Dev dependencies are used for tox testing and are not directly imported
@@ -115,4 +118,9 @@ DEP002 = [
     "pytest",
     "ruff",
     "tox",
+]
+
+DEP003 = [
+    # PyWin32 doesn't play well with deptry
+    "win32con",
 ]

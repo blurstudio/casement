@@ -13,7 +13,7 @@ jobs:
       github.event_name == 'push' ||
       github.event.pull_request.head.repo.full_name != github.repository
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout code
@@ -22,7 +22,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.x"
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
@@ -34,6 +34,9 @@ jobs:
 
       - name: Format with format
         run: tox -e format
+
+      - name: Deptry pip packages
+        run: tox -e deptry
 
 
   test:
