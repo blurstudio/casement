@@ -57,19 +57,10 @@ where = ["src"]
 write_to = "src/casement/version.py"
 version_scheme = "release-branch-semver"
 
-[tool.black]
-skip-string-normalization = true
+[tool.isort]
+profile = "black"
 
-[tool.flake8]
-select = ["B", "C", "E", "F", "N", "W", "B9"]
-extend-ignore = [
-    "E203",
-    "E501",
-    "E722",
-    "W503",
-    "B904",
-]
-max-line-length = 80
+[tool.ruff]
 exclude = [
     "*.egg-info",
     "*.pyc",
@@ -80,4 +71,48 @@ exclude = [
     "__pycache__",
     "build",
     "dist",
+]
+
+line-length = 80
+indent-width = 4
+target-version = "py37"
+output-format = "concise"
+
+[tool.ruff.lint]
+select = ["B", "C", "E", "F", "N", "W", "B9"]
+ignore = [
+    "E203",
+    "E501",
+    "E722",
+    "B904",
+]
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+# Like Black, use preserve quotes for strings.
+quote-style = "preserve"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
+[tool.deptry.per_rule_ignores]
+DEP002 = [
+    # Dev dependencies are used for tox testing and are not directly imported
+    "covdefaults",
+    "coverage",
+    "pytest",
+    "ruff",
+    "tox",
 ]

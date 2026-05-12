@@ -1,38 +1,32 @@
 ---
 ci:
   autoupdate_schedule: quarterly
-  skip: [black, flake8]
 
 repos:
 
--   repo: https://github.com/psf/black
-    rev: 22.12.0
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.15.12
     hooks:
-    -   id: black
+      # Run the linter.
+      - id: ruff-check
+        args: [--output-format=concise]
+      # Run the formatter.
+      - id: ruff-format
 
--   repo: https://github.com/PyCQA/flake8
-    rev: 5.0.4
-    hooks:
-    -   id: flake8
-        additional_dependencies:
-            - flake8-bugbear==23.3.12
-            - Flake8-pyproject
-            - pep8-naming==0.11.1
-
--   repo: https://github.com/pre-commit/pre-commit-hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
-      - id: check-json
       - id: check-toml
-      - id: check-xml
       - id: check-yaml
       - id: debug-statements
       - id: end-of-file-fixer
       - id: requirements-txt-fixer
       - id: trailing-whitespace
 
--   repo: https://github.com/PyCQA/isort
-    rev: 6.0.1
+  - repo: https://github.com/PyCQA/isort
+    rev: 8.0.1
     hooks:
       - id: isort
         name: isort (python)
+        language_version: python3.11
