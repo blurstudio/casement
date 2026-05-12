@@ -18,8 +18,6 @@ Note: See test_env_var.py to see how testing Environment variables are handled.
 # without the need for the host to actually have these registry keys. We should
 # only enable testing of registry modifications once this is resolved.
 # Ie don't running casement tests should not modify the host registry.
-from __future__ import absolute_import
-
 from contextlib import contextmanager
 
 import pytest
