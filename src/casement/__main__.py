@@ -4,7 +4,7 @@ from __future__ import absolute_import
 
 import sys
 
-import casement.cli
+import casement.cli  # deptry: ignore[DEP003]
 
 if __name__ == '__main__':
     # TODO: move casement cli to click
