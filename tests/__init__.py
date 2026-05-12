@@ -6,8 +6,10 @@ import pytest
 # writing to the registry should use `@reg_write_skipif()`
 ENABLE_ENV_VAR = 'CASEMENT_TEST_WRITE_ENV'
 SKIP_ENV_VAR_WRITES = os.getenv(ENABLE_ENV_VAR) != '1'
-ENV_VAR_REASON = "To enable registry write tests, set the env var `{}` to `1`.".format(
-    ENABLE_ENV_VAR
+ENV_VAR_REASON = (
+    "To enable registry write tests, set the env var `{}` to `1`.".format(
+        ENABLE_ENV_VAR
+    )
 )
 
 

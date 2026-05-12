@@ -1,5 +1,4 @@
-""" Enables support for calling the casement cli using `python -m casement`
-"""
+"""Enables support for calling the casement cli using `python -m casement`"""
 
 from __future__ import absolute_import
 

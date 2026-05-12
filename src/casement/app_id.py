@@ -44,7 +44,10 @@ class AppId(object):
             # Original info from https://stackoverflow.com/a/61714895
             key = propsys.PSGetPropertyKeyFromName("System.AppUserModel.ID")
             store = propsys.SHGetPropertyStoreFromParsingName(
-                shortcut, None, shellcon.GPS_READWRITE, propsys.IID_IPropertyStore
+                shortcut,
+                None,
+                shellcon.GPS_READWRITE,
+                propsys.IID_IPropertyStore,
             )
 
             new_value = propsys.PROPVARIANTType(app_id, pythoncom.VT_BSTR)
@@ -84,5 +87,9 @@ class AppId(object):
 
         # https://stackoverflow.com/a/27872625
         if prefix:
-            appid = u'%s.%s' % (prefix, appid)
-        return not ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(appid)
+            appid = '%s.%s' % (prefix, appid)
+        return (
+            not ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(
+                appid
+            )
+        )

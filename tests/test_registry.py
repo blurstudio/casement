@@ -13,6 +13,7 @@ Here are the registry keys that are modified when write testing is enabled.
 
 Note: See test_env_var.py to see how testing Environment variables are handled.
 """
+
 # TODO: Look into using a custom testing registry hive to handle all testing
 # without the need for the host to actually have these registry keys. We should
 # only enable testing of registry modifications once this is resolved.
@@ -61,7 +62,11 @@ def remove_reg_keys(items):
     'key,sub_key,hkey',
     [
         # Note: Lowercase testing is handled in the test, only use uppercase here
-        ('HKEY_LOCAL_MACHINE', 'SOFTWARE\\Microsoft', winreg.HKEY_LOCAL_MACHINE),
+        (
+            'HKEY_LOCAL_MACHINE',
+            'SOFTWARE\\Microsoft',
+            winreg.HKEY_LOCAL_MACHINE,
+        ),
         ('HKLM', 'SOFTWARE\\Microsoft', winreg.HKEY_LOCAL_MACHINE),
         ('HKEY_CURRENT_USER', 'SOFTWARE\\Microsoft', winreg.HKEY_CURRENT_USER),
         ('HKCU', 'SOFTWARE\\Microsoft', winreg.HKEY_CURRENT_USER),
