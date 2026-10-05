@@ -24,6 +24,7 @@ shortcut.
 Here is a example of pinning a shortcut to the start menu:
 ```python
 from casement.shortcut import Shortcut
+
 with Shortcut(r'C:\Users\Public\Desktop\My Shortcut.lnk') as sc:
     sc.pin_to_start_menu()
 ```
