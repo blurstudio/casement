@@ -5,7 +5,17 @@ import pytest
 from casement.shortcut import Shortcut
 
 
-def test_create_icon_from_svg(tmp_path, monkeypatch):
+def test_create_icon_copies_existing_ico(tmp_path):
+    (tmp_path / "icon.ico").write_bytes(b"ico data")
+    output = tmp_path / "out" / "copied.ico"
+
+    result = Shortcut.create_icon(str(tmp_path / "icon.svg"), str(output))
+
+    assert result == str(output)
+    assert output.read_bytes() == b"ico data"
+
+
+def test_create_shortcut_icon_from_svg(tmp_path, monkeypatch):
     pil_image = pytest.importorskip("PIL.Image")
     resvg_py = pytest.importorskip("resvg_py")
 
