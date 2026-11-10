@@ -1,1 +1,2 @@
-pillow
+pillow>=8.1
+resvg-py>=0.2.6; python_version >= "3.9"
